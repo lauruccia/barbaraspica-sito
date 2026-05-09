@@ -77,7 +77,26 @@
         <h2>Scrivimi</h2>
         <p style="color:var(--c-text-soft)">Compila il modulo: ti risponderò entro 1-2 giorni lavorativi all'indirizzo email indicato. Se preferisci un contatto più rapido, usa WhatsApp o il telefono.</p>
 
-        <div id="form-status"><script>(function(){var p=new URLSearchParams(location.search);if(p.get("inviato"))document.write("<div class=\"alert alert-success\"><strong>Messaggio inviato!</strong> Ti ricontatterò il prima possibile. Controlla anche la cartella spam per la mia risposta.</div>");else if(p.get("errore"))document.write("<div class=\"alert alert-error\"><strong>Si è verificato un errore.</strong> Riprova oppure scrivimi a <a href=\"mailto:info@barbaraspica.it\">info@barbaraspica.it</a> o su WhatsApp.</div>");})();</script></div>
+        <div id="form-status"><script>(function(){
+var p=new URLSearchParams(location.search);
+if(p.get("inviato")){
+  document.write('<div class="alert alert-success"><strong>Messaggio inviato!</strong> Ti ricontattero il prima possibile. Controlla anche la cartella spam per la mia risposta.</div>');
+} else if(p.has("errore")){
+  var code=p.get("errore")||"unknown";
+  var msg={
+    "rate-limit":"Hai inviato troppi messaggi di recente. Riprova tra qualche minuto.",
+    "invalid-email":"L\'email che hai inserito non e\' valida.",
+    "invalid-name":"Inserisci un nome valido (minimo 2 caratteri).",
+    "invalid-message-length":"Il messaggio deve essere tra 10 e 3000 caratteri.",
+    "no-privacy-consent":"Devi accettare l\'informativa sulla privacy.",
+    "mail-function-disabled":"Il sistema di invio email non e\' attivo. Scrivimi a info@barbaraspica.it.",
+    "mail-send-failed":"L\'invio dell\'email e\' fallito. Scrivimi a info@barbaraspica.it o su WhatsApp.",
+    "method-not-post":"Errore di richiesta. Ricarica la pagina e riprova.",
+    "bad-form-id":"Errore tecnico. Ricarica la pagina e riprova."
+  }[code]||"Si e verificato un errore imprevisto (codice: "+code+"). Scrivimi a info@barbaraspica.it.";
+  document.write('<div class="alert alert-error"><strong>Errore:</strong> '+msg+'</div>');
+}
+})();</script></div>
 
         <form id="contact-form" class="form-wrap" action="/contact.php" method="post" novalidate>
           <input type="hidden" name="form_id" value="contact_v1">
