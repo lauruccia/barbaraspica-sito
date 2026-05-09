@@ -22,9 +22,9 @@ $CONFIG = [
     'to'         => 'info@barbaraspica.it',
     'to_name'    => 'Dott.ssa Barbara Spica',
 
-    // From: deve essere un indirizzo del DOMINIO (es. noreply@barbaraspica.it)
-    // perché molti hosting bloccano i mittenti esterni (SPF/DKIM)
-    'from'       => 'noreply@barbaraspica.it',
+    // From: deve essere un indirizzo del DOMINIO che esiste come account email
+    // sul tuo cPanel. Se "noreply@" non esiste o se l'hosting blocca, usa "info@".
+    'from'       => 'info@barbaraspica.it',
     'from_name'  => 'Sito barbaraspica.it',
 
     // Reply-To verrà impostato automaticamente sull'email dell'utente
@@ -181,8 +181,25 @@ $headers .= "Content-Transfer-Encoding: 8bit\r\n";
 
 $subj_b64 = "=?UTF-8?B?" . base64_encode($mail_subject) . "?=";
 
-// Invio (la mail() di PHP funziona di default su quasi tutti i cPanel)
-$ok = @mail($CONFIG['to'], $subj_b64, $body, $headers, "-f $from_safe");
+// Verifica se mail() esiste/è abilitata
+if (!function_exists('mail')) {
+    @file_put_contents(__DIR__.'/.contact-error.log',
+        date('Y-m-d H:i:s')." mail() disabled\n", FILE_APPEND);
+    redirect_with($CONFIG['redirect_err']);
+}
+
+// Invio email principale a info@barbaraspica.it
+$ok = @mail($CONFIG['to'], $subj_b64, $body, $headers, "-f " . $from_safe);
+
+// Se fallisce, prova senza il -f (alcuni hosting non lo accettano)
+if (!$ok) {
+    $ok = @mail($CONFIG['to'], $subj_b64, $body, $headers);
+}
+
+// Log dell'esito (per debug, visibile solo via FileManager)
+@file_put_contents(__DIR__.'/.contact-error.log',
+    date('Y-m-d H:i:s')." mail()=" . ($ok ? "OK" : "FAIL") . " to={$CONFIG['to']} from=$from_safe\n",
+    FILE_APPEND);
 
 // Auto-reply all'utente (se mail() ha funzionato)
 if ($ok) {
