@@ -10,27 +10,4 @@
 ---
 deployment:
   tasks:
-    # Cartella di destinazione (hosting cPanel - utente: ibarbarf)
-    # Cambia "ibarbarf" se l'username cPanel è diverso, e cambia "public_html"
-    # in "addon-domain-folder/" se il dominio non è il principale.
-    - export DEPLOYPATH=/home/ibarbarf/public_html/
-
-    # Sincronizzo i file (non uso --delete per non rimuovere file caricati a mano)
-    - /bin/rsync -avz \
-        --exclude='.git' \
-        --exclude='.gitignore' \
-        --exclude='.cpanel.yml' \
-        --exclude='_articles' \
-        --exclude='_tools' \
-        --exclude='*.bat' \
-        --exclude='*.sh' \
-        --exclude='GUIDA-ARTICOLI.md' \
-        --exclude='README.md' \
-        --exclude='DEPLOY.md' \
-        ./ $DEPLOYPATH
-
-    # Permessi corretti
-    - /bin/chmod 644 $DEPLOYPATH.htaccess 2>/dev/null || true
-    - /bin/find $DEPLOYPATH -type f -name '*.html' -exec chmod 644 {} + 2>/dev/null || true
-    - /bin/find $DEPLOYPATH -type f -name '*.php' -exec chmod 644 {} + 2>/dev/null || true
-    - /bin/find $DEPLOYPATH -type d -exec chmod 755 {} + 2>/dev/null || true
+    - /bin/rsync -av --exclude='.git' --exclude='.gitignore' --exclude='.cpanel.yml' --exclude='_articles' --exclude='_tools' --exclude='*.bat' --exclude='*.sh' --exclude='*.md' /home/ibarbarf/repositories/barbaraspica-sito/ /home/ibarbarf/public_html/
