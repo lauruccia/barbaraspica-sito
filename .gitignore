@@ -1,0 +1,15 @@
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# Logs
+.contact-rate.log
+*.log
+
+# Local backup
+backup/
+*.bak

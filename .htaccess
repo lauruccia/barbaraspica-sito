@@ -1,0 +1,112 @@
+# =============================================================
+# .htaccess - barbaraspica.it
+# Sicurezza, redirect, performance per cPanel/Apache
+# =============================================================
+
+# ---- Default charset ----
+AddDefaultCharset UTF-8
+
+# ---- Forza HTTPS + dominio canonico (con www o senza? Scegli!) ----
+# Versione SENZA www (più moderna) — commenta/decommenta secondo preferenza
+RewriteEngine On
+
+# Forza HTTPS
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# Forza dominio senza www (rimuovi se preferisci www)
+RewriteCond %{HTTP_HOST} ^www\.barbaraspica\.it [NC]
+RewriteRule ^(.*)$ https://barbaraspica.it/$1 [R=301,L]
+
+# ---- Pagina 404 personalizzata ----
+ErrorDocument 404 /404.html
+
+# ---- URL "puliti": permetti /chi-sono al posto di /chi-sono.html ----
+# Rimuove .html dall'URL visibile
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# Internamente serve il .html
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.+?)/?$ $1.html [L]
+
+# ---- Redirect dal vecchio sito WordPress ----
+# Vecchio /la-relazione-come-punto-di-partenza/ → nuovo /approccio
+Redirect 301 /la-relazione-come-punto-di-partenza/ /approccio.html
+Redirect 301 /la-relazione-come-punto-di-partenza /approccio.html
+# Vecchi URL WordPress con / finale → senza
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+# ---- Sicurezza: blocca accesso a file sensibili ----
+<FilesMatch "(^\.|composer\.(json|lock)|package(-lock)?\.json|README\.md|GUIDA-ARTICOLI\.md|.*\.(bat|sh|py|md))$">
+  Require all denied
+</FilesMatch>
+
+# Blocca accesso alla cartella _articles e _tools
+RedirectMatch 403 ^/_articles(/.*)?$
+RedirectMatch 403 ^/_tools(/.*)?$
+RedirectMatch 403 ^/.contact-rate.log$
+
+# Disabilita listing directory
+Options -Indexes
+
+# ---- Security headers ----
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+  # HSTS: forza HTTPS per 1 anno (decommenta SOLO dopo aver verificato HTTPS funzionante!)
+  # Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
+
+# ---- Compressione gzip ----
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json application/xml text/xml image/svg+xml font/ttf font/otf application/font-woff application/font-woff2
+</IfModule>
+
+# ---- Cache headers ----
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # HTML: short cache (per aggiornamenti rapidi)
+  ExpiresByType text/html "access plus 1 hour"
+
+  # CSS / JS: 1 mese (versionati con ?v= se cambi)
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 month"
+
+  # Immagini: 1 anno
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+
+  # Font
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType font/ttf "access plus 1 year"
+
+  # Manifest, JSON
+  ExpiresByType application/manifest+json "access plus 1 week"
+  ExpiresByType application/json "access plus 0 seconds"
+</IfModule>
+
+# ---- MIME types corretti ----
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType image/svg+xml .svg
+  AddType application/manifest+json .webmanifest
+  AddType font/woff2 .woff2
+  AddType font/woff .woff
+</IfModule>
+
+# ---- PHP error handling: non mostrare errori in produzione ----
+<IfModule mod_php.c>
+  php_flag display_errors off
+  php_flag log_errors on
+</IfModule>

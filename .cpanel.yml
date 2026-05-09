@@ -1,0 +1,32 @@
+# =============================================================
+# .cpanel.yml — Deploy automatico via Git Version Control di cPanel
+# =============================================================
+# Quando fai "Update from Remote" + "Deploy HEAD Commit" su cPanel,
+# i file vengono copiati nella cartella del sito (public_html).
+# IMPORTANTE: aggiorna la riga DEPLOYPATH se usi un sottodominio
+# o una sottocartella diversa da public_html.
+# =============================================================
+
+---
+deployment:
+  tasks:
+    # Cartella di destinazione: cambia se usi una cartella diversa
+    - export DEPLOYPATH=/home/$USER/public_html/
+    # Copia tutti i file tranne quelli ignorati da .gitignore e cartelle build/dev
+    - /bin/rsync -avz --delete \
+        --exclude='.git' \
+        --exclude='.gitignore' \
+        --exclude='.cpanel.yml' \
+        --exclude='_articles' \
+        --exclude='_tools' \
+        --exclude='*.bat' \
+        --exclude='*.sh' \
+        --exclude='GUIDA-ARTICOLI.md' \
+        --exclude='README.md' \
+        --exclude='DEPLOY.md' \
+        ./ $DEPLOYPATH
+    # Permessi corretti
+    - /bin/chmod 644 $DEPLOYPATH.htaccess 2>/dev/null || true
+    - /bin/chmod 644 $DEPLOYPATH*.html 2>/dev/null || true
+    - /bin/chmod 644 $DEPLOYPATH*.php 2>/dev/null || true
+    - /bin/chmod 755 $DEPLOYPATH 2>/dev/null || true

@@ -1,0 +1,14 @@
+# robots.txt - barbaraspica.it
+# Permetti tutto, disallow solo cartelle tecniche
+
+User-agent: *
+Allow: /
+Disallow: /_articles/
+Disallow: /_tools/
+Disallow: /webapp/
+Disallow: /contact.php
+Disallow: /*?inviato=
+Disallow: /*?errore=
+
+# Sitemap
+Sitemap: https://barbaraspica.it/sitemap.xml
