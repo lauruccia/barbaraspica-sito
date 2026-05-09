@@ -23,7 +23,7 @@ $CONFIG = [
     'to'            => 'info@barbaraspica.it',
     'to_name'       => 'Dott.ssa Barbara Spica',
     'from'          => 'info@barbaraspica.it',     // deve essere = smtp_user
-    'from_name'     => 'Sito Barbaraspica.it',
+    'from_name'     => 'Dott.ssa Barbara Spica - Barbaraspica.it',
 
     // Anti-spam
     'min_fill_seconds' => 0,
@@ -217,7 +217,7 @@ if (strpos($CONFIG['smtp_pass'], 'INSERISCI') === 0) {
 
 // Costruisci body
 $display_name = trim("$name $surname");
-$mail_subject = "[Sito] $subject - da $display_name";
+$mail_subject = "[Dott.ssa Barbara Spica - Sito] $subject - da $display_name";
 
 $body  = "Hai ricevuto un nuovo messaggio dal modulo di contatto del tuo sito.\r\n";
 $body .= "================================================================\r\n\r\n";
