@@ -10,4 +10,5 @@
 ---
 deployment:
   tasks:
-    - /bin/rsync -av --exclude='.git' --exclude='.gitignore' --exclude='.cpanel.yml' --exclude='_articles' --exclude='_tools' --exclude='*.bat' --exclude='*.sh' --exclude='*.md' /home/ibarbarf/repositories/barbaraspica-sito/ /home/ibarbarf/public_html/
+    - /bin/rsync -av --no-perms --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r --exclude='.git' --exclude='.gitignore' --exclude='.cpanel.yml' --exclude='_articles' --exclude='_tools' --exclude='*.bat' --exclude='*.sh' --exclude='*.md' /home/ibarbarf/repositories/barbaraspica-sito/ /home/ibarbarf/public_html/
+    - /bin/chmod 644 /home/ibarbarf/public_html/.htaccess
