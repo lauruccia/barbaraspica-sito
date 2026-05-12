@@ -55,7 +55,16 @@ def head(title, description, path, og_image=None, schema_extra=None):
                     "addressCountry": "IT", "addressRegion": "Calabria"},
         "knowsAbout": ["Disturbi del neurosviluppo", "Psicomotricità infantile",
                        "DIR/Floortime", "Early Start Denver Model (ESDM)",
-                       "Disturbo dello spettro autistico", "ADHD", "Disprassia", "Sindrome di Down"]
+                       "Disturbo dello spettro autistico", "ADHD", "Disprassia", "Sindrome di Down"],
+        "hasCredential": {
+            "@type": "EducationalOccupationalCredential",
+            "name": "Iscrizione Albo TNPEE",
+            "credentialCategory": "license",
+            "recognizedBy": {"@type": "Organization",
+                             "name": "Ordine TSRM PSTRP di Reggio Calabria",
+                             "url": "https://tsrmpstrprc.it"},
+            "identifier": "04"
+        }
     }
     business_schema = {
         "@context": "https://schema.org", "@type": ["MedicalBusiness", "LocalBusiness"],
