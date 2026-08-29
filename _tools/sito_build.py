@@ -56,15 +56,7 @@ def head(title, description, path, og_image=None, schema_extra=None):
         "knowsAbout": ["Disturbi del neurosviluppo", "Psicomotricità infantile",
                        "DIR/Floortime", "Early Start Denver Model (ESDM)",
                        "Disturbo dello spettro autistico", "ADHD", "Disprassia", "Sindrome di Down"],
-        "hasCredential": {
-            "@type": "EducationalOccupationalCredential",
-            "name": "Iscrizione Albo TNPEE",
-            "credentialCategory": "license",
-            "recognizedBy": {"@type": "Organization",
-                             "name": "Ordine TSRM PSTRP di Reggio Calabria",
-                             "url": "https://tsrmpstrprc.it"},
-            "identifier": "04"
-        }
+        "hasCredential": [{"@type": "EducationalOccupationalCredential", "name": "Iscrizione Albo TNPEE", "credentialCategory": "license", "recognizedBy": {"@type": "Organization", "name": "Ordine TSRM PSTRP di Reggio Calabria", "url": "https://tsrmpstrprc.it"}, "identifier": "04"}, {"@type": "EducationalOccupationalCredential", "name": "Iscrizione Albo degli Psicologi - Sezione A", "credentialCategory": "license", "recognizedBy": {"@type": "Organization", "name": "Ordine degli Psicologi"}}, {"@type": "EducationalOccupationalCredential", "name": "Master Training in Play Therapy Cognitivo-Comportamentale", "credentialCategory": "certificate", "educationalLevel": "Master", "recognizedBy": {"@type": "Organization", "name": "Giunti Psicologia.io", "url": "https://www.giuntipsy.it"}}]
     }
     business_schema = {
         "@context": "https://schema.org", "@type": ["MedicalBusiness", "LocalBusiness"],
