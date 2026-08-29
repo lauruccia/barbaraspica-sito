@@ -232,7 +232,7 @@ if __name__ == '__main__':
     if sys.argv[1] == '--all':
         files = sorted([os.path.join(SITO, '_articles', f)
                        for f in os.listdir(os.path.join(SITO, '_articles'))
-                       if f.endswith('.md')])
+                       if f.endswith('.md') and not f.startswith('_')])
     else:
         files = sys.argv[1:]
 
